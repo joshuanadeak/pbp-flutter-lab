@@ -8,23 +8,20 @@
 Sebelum bisa mengetahui perbedaan antara keduanya, tentunya perlu dianalisis terlebih dahulu definisi dari **_State_**, **_Stateless Widget_**, dan **_Stateful Widget_**.
 1. **_State_** adalah berbagai informasi yang bisa dibaca secara sinkronus ketika _widget_ dibangun dan mungkin berubah selama masa hidup _widget_-nya.
 2. **_Stateless Widget_** adalah sebuah _widget_ yang state-nya tidak bisa diganggu gugat setelah dibangun. _Widget_ ini immutable ketika mereka dibangun dalam kata lain perubahan apapun pada variabel, icon, tombol, atau pengambilan data tidak akan mengubah state app-nya. Contoh sederhananya adalah `Text`.
-3. **_Stateful Widget_** adalah sebuah _widget_ yang state-nya bisa diubah setelah dibangun. State dari _widget_ ini mutable dan bisa diubah berkali-kali dalam waktu hidupnya. Artinya state dari aplikasi bisa berubah berkali-kali dengan sekumpulan variabel, input, dan data yang berbeda. Contoh sederhananya adalah `Form` dan `TextField`.
-<br>
+3. **_Stateful Widget_** adalah sebuah _widget_ yang state-nya bisa diubah setelah dibangun. State dari _widget_ ini mutable dan bisa diubah berkali-kali dalam waktu hidupnya. Artinya state dari aplikasi bisa berubah berkali-kali dengan sekumpulan variabel, input, dan data yang berbeda. Contoh sederhananya adalah `Form` dan `TextField`. <br />
 Sumber: [GeeksforGeeks](https://www.geeksforgeeks.org/flutter-stateful-vs-stateless-widgets/)
 
 Perbedaan antara **_Stateless Widget_** dan **_Stateful Widget_** antara lain sebagai berikut:
 **_Stateless Widget_**
 1.  _Widgetnya Static_
 2. Hal ini tidak bergantung pada perubahan data atau perubahan _behavior_ apapun
-3. Tidak memiliki state, akan di _render_ sekali dan tidak akan di-_update_ sendiri, tetapi hanya akan diperbarui saat data eksternalnya berubah
-<br>
+3. Tidak memiliki state, akan di _render_ sekali dan tidak akan di-_update_ sendiri, tetapi hanya akan diperbarui saat data eksternalnya berubah <br />
 Contohnya: `Text`. 
 
 **_Stateful Widget_**
 1. _Widgetnya Dynamic_
 2. Dilakukan _update_ selama _runtime_ berdasarkan _action_ atau perubahan data yang dilakukan oleh _user_
-3. Memiliki _internal state_ dan dapat dilakukan _re-render_ jika input data nya berubah atau saat _state_ dari _widget_ berubah
-<br>
+3. Memiliki _internal state_ dan dapat dilakukan _re-render_ jika input data nya berubah atau saat _state_ dari _widget_ berubah <br />
 Contohnya: `Form` dan `TextField`.
 
 ## Widget Apa Saja yang Dipakai pada Proyek Kali Ini Beserta Fungsinya
