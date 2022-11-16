@@ -133,3 +133,26 @@ floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
 ### Melakukan Push Ke Repo
 Gunakan perintah `git add .`, `git commit -m "Comment"`, dan `git push`
+
+---
+---
+
+# Assignment 8 PBP: Flutter Form
+
+### Nama: Joshua Mihai Daniel Nadeak.
+### NPM: 2106635285.
+### Kelas: PBP-E.
+
+## Perbedaan Navigator.push dan Navigator.pushReplacement
+
+## Widget Yang Dipergunakan Di Proyek Kali Ini
+
+## Jenis-jenis _Event_ Pada Flutter
+
+## Cara Kerja Navigator Dalam "Mengganti" Halaman Pada Flutter
+
+## Cara Implementasi Yang Dilakukan
+
+
+### Melakukan Push Ke Repo
+Gunakan perintah `git add .`, `git commit -m "Comment"`, dan `git push`
