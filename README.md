@@ -144,15 +144,66 @@ Gunakan perintah `git add .`, `git commit -m "Comment"`, dan `git push`
 ### Kelas: PBP-E.
 
 ## Perbedaan Navigator.push dan Navigator.pushReplacement
+Pada dasarnya, `Navigator.pushReplacement` melakukan pergantian halaman dengan cara melakukan pop terlebih dahulu halaman yang ada saat ini dari stack, kemudian melakukan push terhadap halaman yang dituju (seperti mengganti elemen teratas pada stack dengan halaman baru).
+Sementara itu, `Navigator.push` langsung melakukan push terhadap stack halaman tanpa melakukan pop sehingga halaman sebelumnya masih tetap ada dalam stack.
+
+Jadi, sesungguhnya `Navigator.push` dan `Navigator.pushReplacement` sama-sama menambahkan rute ke Navigator. Yang menjadi pembeda adalah `Navigator.push` rute yang ada di bawahnya akan tetap tersimpan di dalam Stack, sedangkan `Navigator.pushReplacement` akan membuang rute yang sebelumnya ditimpa.
 
 ## Widget Yang Dipergunakan Di Proyek Kali Ini
+1. `Form` : untuk menghimpun elemen-elemen pada halaman input budget.
+2. `TextFormField` : untuk menampilkan textbox untuk menginput judul dan nominal budget.
+3. `DropdownButtonFormField` : untuk menampilkan menu dropdown berisi tipe budget.
+4. `Drawer` : sebagai bagian untuk navigasi antar halaman layaknya Navbar di Django, terdapat di bagian atas aplikasi (bisa di bawah, kiri, atau kanan juga tergantung pemosisiannya).
+5. `Padding` : Memberikan padding kepada widget child-nya.
+6. `TextButton` : untuk menambahkan tombol submisi budget
+7. `Card` : untuk menampilkan informasi mengenai suatu budget dalam bentuk kotak kartu.
+8. `InputDecoration` : untuk mengkustomisasi tampilan dari TextFormField, seperti menambahkan teks bantuan, label, ikon, serta border.
 
 ## Jenis-jenis _Event_ Pada Flutter
+1.  `onTapDown`
+2.  `onTapUp`
+3.  `onTapCancel` 
+4.  `onScaleStart `
+5.  `onScaleUpdate `
+6.  `onScaleEnd`
+7.  `onPressed `
+8.  `onTap`
+9.  `onChanged `
+10. `onSubmitted `
+11. `onLongPress `
+12. `onDoubleTap `
+13. `onVerticalDragStart`
+14. `onVerticalDragUpdate` 
+15. `onVerticalDragEnd`
+16. `onPanStart`
+17. `onSemanticsTap `
+18. `onSemanticsLongPress` 
+19. `onSemanticsScrollLeft` 
+20. `onDismissed`
+21. `onResize`
+22. `onReorder `
+23. `onRefresh `
+24. `onLoading `
+25. `onError`
+26. `onEditingComplete`
 
 ## Cara Kerja Navigator Dalam "Mengganti" Halaman Pada Flutter
+Pada dasarnya, perlu diketahui bahwa `Navigator` bekerja sebagai manager untuk setiap _child_ yang ada layaknya Stack. Tujuan dari hal ini adalah nantinya `Navigator` akan menjadi urutan logika dalam menampilkan halaman pada aplikasi. Yang disimpan pada `Navigator` adalah rute-rute pada _app_. Untuk berpindah dari satu halaman ke halaman lain, terdapat method `push` dan `pop`. `push` adalah untuk menambahkan rute baru pada Navigator serta pindah ke rute tersebut sedangkan `pop` adalah untuk melepas rute yang ada di paling atas `Navigator` dan kembali ke rute sebelumnya.
 
 ## Cara Implementasi Yang Dilakukan
+### Credits To Rendy For The Ideas (Thanks!)
 
+### Membuat `model.dart`
+Pertama-tama, akan dibuat kelas baru yang akan dinamakan `Budget`, di mana atributnya adalah _title, type, nominal_ dan nantinya ada `BudgetModel` yang mengambil dari `ChangeNotifier` untuk melakukan manage stage dari `Budget` bila akan ada penambahan data baru pada list yang dibuat.
+
+### Membuat `form.dart`
+Pada bagiamn ini, akan dibuat suatu kelas baru bernama `FormBudget` yang nantinya akan dipergunakan di `Drawer` dan `_FormBudgetState` untuk mengatur bagaimana nantinya widget `FormBudget` dibuat. Lalu akan ditambahkan `Form` dan elemen-elemen yang terkait sesuai gambaran soal, di mana saya menambahkan `textbox`, `button`, dan juga `dropdown menu`.
+
+### Membuat `list.dart`
+Awalnya akan dibuat kelas baru bernama `ListBudget` sehingga nantinya akan dapat dipanggil `Drawer` serta `_ListBudgetState`, yang nantinya ini akan mengatur apa yang akan terjadi ketika ditampilkan elemen pada List yang berisi data dari budget. Nantinya representasinya akan divisualisasikan berbentuk `Card`.
+
+### Membuat `drawer.dart`
+Pertama-tama akan dibuat terlebih dahulu kelas `LabDrawer` dan nantinya pun `_LabDrawerState`. Ini nantinya akan mengatur bagaimana yang terjadi ketika widget `LabDrawer` dibuat. Dalam implementasi saya, diutilisasikan `ListTile` yang akan memuat nama-nama rute untuk melakukan perpindahan antar _page_ dan nantinya akan ditambahkan event listener `onTap`, sehingga ketika diklik akan pindah _page_.
 
 ### Melakukan Push Ke Repo
 Gunakan perintah `git add .`, `git commit -m "Comment"`, dan `git push`
