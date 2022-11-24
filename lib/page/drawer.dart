@@ -1,9 +1,10 @@
 // Credits For Ideas: Rendy
 
 import 'package:flutter/material.dart';
-import 'package:counter_7/form.dart';
-import 'package:counter_7/list.dart';
+import 'package:counter_7/page/form.dart';
+import 'package:counter_7/page/list.dart';
 import 'package:counter_7/main.dart';
+import 'package:counter_7/page/mywatchlistpage.dart';
 
 class LabDrawer extends StatefulWidget {
   const LabDrawer({super.key});
@@ -41,6 +42,15 @@ class _LabDrawerState extends State<LabDrawer> {
             onTap: () {
               Navigator.push(
                 context, MaterialPageRoute(builder: (context) => const ListBudget()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('My Watch List'),
+            onTap: () {
+                Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const MyWatchlistPage()),
               );
             },
           ),

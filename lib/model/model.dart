@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'dart:collection';
 
 class Budget {
-  const Budget(this.title, this.nominal, this.type);
+  const Budget(this.title, this.nominal, this.type, this.date);
 
   final String title;
   final String type;
   final int nominal;
+  final DateTime date;
 }
 
 class BudgetModel extends ChangeNotifier {

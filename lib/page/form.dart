@@ -1,8 +1,8 @@
 // Credits For Ideas: Rendy
 
 import 'package:flutter/material.dart';
-import 'package:counter_7/model.dart';
-import 'package:counter_7/drawer.dart';
+import 'package:counter_7/model/model.dart';
+import 'package:counter_7/page/drawer.dart';
 import 'package:provider/provider.dart';
 
 class FormBudget extends StatefulWidget {
@@ -21,14 +21,16 @@ class _FormBudgetState extends State<FormBudget> {
     "Pengeluaran",
     "Pemasukan"
   ];
-  DateTime date = DateTime.now();
+  DateTime? date;
 
   void submitForm(BuildContext context) {
-    if(!_formKey.currentState!.validate()) {
+    if(!_formKey.currentState!.validate() || date == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Fill In The Data!")));
       return;
     }
 
-    final newBudget = Budget(title, nominal, type!);
+    final newBudget = Budget(title, nominal, type!, date!);
     Provider.of<BudgetModel>(context, listen: false).add(newBudget);
 
     const snackBar = SnackBar(
@@ -128,6 +130,34 @@ class _FormBudgetState extends State<FormBudget> {
 
                   return null;
                 },
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(date != null
+                      ? "${date!.day}-${date!.month}-${date!.year}"
+                      : "Date Hasn't Been Added"),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () => showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2022),
+                                lastDate: DateTime(2030))
+                            .then((value) => setState(() {
+                                  date = value;
+                                })),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.blue),
+                            foregroundColor:
+                                MaterialStateProperty.all(Colors.white)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text("Pilih Tanggal"),
+                        ),
+                      )
+                ],
               ),
               const Spacer(), // Beri jarak dengan Button
               TextButton(

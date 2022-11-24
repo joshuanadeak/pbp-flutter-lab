@@ -207,3 +207,193 @@ Pertama-tama akan dibuat terlebih dahulu kelas `LabDrawer` dan nantinya pun `_La
 
 ### Melakukan Push Ke Repo
 Gunakan perintah `git add .`, `git commit -m "Comment"`, dan `git push`
+
+---
+---
+
+# Assignment 9 PBP: Integrasi Web Service pada Flutter
+
+### Nama: Joshua Mihai Daniel Nadeak.
+### NPM: 2106635285.
+### Kelas: PBP-E.
+
+## Apakah bisa kita melakukan pengambilan data JSON tanpa membuat model terlebih dahulu? Jika iya, apakah hal tersebut lebih baik daripada membuat model sebelum melakukan pengambilan data JSON?
+Secara sederhana, kita bisa melakukan pengambilan data JSON tanpa membuat model terlebih dahulu. Namun, tentunya terdapat kekurangan dari pelaksanaan metode ini, yakni bahwa ini bukanlah _best practice_ yang seharusnya diterapkan dan akan lebih buruk bentuknya dari ketika dibuat model terlebih dahulu, dengan kata lain tentunya penyimpanan data yang di-_fetch_ akan lebih berantakan. Jika kita membuat model terlebih dahulu, penyimpanan data akan lebih terstruktur sehingga pengambilan data yang sudah disimpan akan lebih mudah. Sehingga, jika model dibuat terlebih dulu akan mempermudah dalam penyimpanan dan pengaksesan data.
+
+## Sebutkan widget apa saja yang kamu pakai di proyek kali ini dan jelaskan fungsinya.
+1. `LabDrawer` : untuk berfungsi sebagai bagian dalam navigasi antar halaman layaknya `Navbar` di Django, terdapat pada bagian atas aplikasi (bisa di bawah, kiri, atau kanan juga tergantung pemosisiannya, cuma dalam kasus ini di bagian atas). Ini merupakan kustomisasi Drawer buatan sendiri.
+2. `DateFormat`: untuk melakukan format data tanggal agar ditampilkan dengan standar penulisan tanggal yang sesuai (pada kasus ini digunakan sistem penanggalan yMMMMd).
+3. `ListView` : telah dikerjakan dengan method `builder()`, di mana ini berfungsi untuk membuat _cards_ pada layar sesuai dengan banyak data yang di-_fetch_ sebelumnya.
+4. `FutureBuilder`: untuk berperan sebagai widget yang dapat membangun dirinya sendiri sesuai dengan status pada _future_ sebagai wujud komputasi asinkronus
+5. `ElevatedButton`: untuk menampilkan button untuk kembali ke mywatchlistpage setelah masuk ke bagian mywatchlistdetails.
+6. `InputDecoration`  : untuk mengkustomisasi tampilan dari `TextFormField`, seperti menambahkan teks bantuan, label, ikon, serta border.
+
+## Jelaskan mekanisme pengambilan data dari JSON hingga dapat ditampilkan pada Flutter.
+1. Menambahkan dependency `http` ke proyek
+2. Membuat model sesuai dengan respons dari data yang berasal dari _web service_ yang digunakan (Opsional tapi direkomendasikan).
+3. Membuat `http` request ke web service menggunakan dependency `http`
+4. Decode data yang sudah diambil dan jadikan ke bentuk JSON
+5. Data dalam bentuk JSON ini ubah ke dalam bentuk model yang sudah dibuat di langkah 2
+6. Menampilkan data yang telah dikonversi ke aplikasi dengan `FutureBuilder` atau cara lainnya yang Anda inginkan
+
+## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas.
+### Menambahkan _dependendy_ `http` untuk nantinya melakukan fetch data dan `intl` untuk melakukan sistem penganggalan
+```
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+```
+
+### Membuat Folder dan Menyortir Untuk Mengatur Masing-masing Fungsi
+Dibuat 3 folder, yakni `page`, `model`, juga `data` dan nantinya `main.dart` ada di dalam folder `lib`. Lalu, file `list.dart`, `form.dart`, `drawer.dart` dimasukkan ke folder `page`, `model.dart` dimasukkan ke folder `model`. Setelah itu nantinya akan dibentuk beberapa file untuk pengerjaan tugas ini, yakni `data.dart` yang dimasukkan ke folder `data`, `mywatchlistmodel.dart` yang dimasukkan ke folder `model`, `mywatchlistpage.dart` yang dimasukkan ke folder `page`, dan `mywatchlistdetails.dart` yang dimasukkan ke folder `page`.
+
+### Mengerjakan bagian `mywatchlistmodel.dart`
+Nantinya ini akan dibentuk beberapa field yang akan disesuaikan dengan apa yang telah dikerjakan di lab 3 PBP menggunakan Django sebelumnya. berikut ini implementasinya:
+```
+import 'dart:convert';
+
+List<MyWatchlist> myWatchlistFromJson(String str) => List<MyWatchlist>.from(json.decode(str).map((x) => MyWatchlist.fromJson(x)));
+
+String myWatchlistToJson(List<MyWatchlist> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class MyWatchlist {
+    MyWatchlist({
+        required this.pk,
+        required this.fields,
+    });
+
+    int pk;
+    Fields fields;
+
+    factory MyWatchlist.fromJson(Map<String, dynamic> json) => MyWatchlist(
+        pk: json["pk"],
+        fields: Fields.fromJson(json["fields"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "pk": pk,
+        "fields": fields.toJson(),
+    };
+}
+
+class Fields {
+    Fields({
+        required this.watched,
+        required this.title,
+        required this.rating,
+        required this.releaseDate,
+        required this.review,
+    });
+
+    bool watched;
+    String title;
+    int rating;
+    DateTime releaseDate;
+    String review;
+
+    factory Fields.fromJson(Map<String, dynamic> json) => Fields(
+        watched: json["watched"],
+        title: json["title"],
+        rating: json["rating"],
+        releaseDate: DateTime.parse(json["release_date"]),
+        review: json["review"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "watched": watched,
+        "title": title,
+        "rating": rating,
+        "release_date": "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
+        "review": review,
+    };
+}
+```
+
+### Mengerjakan bagian `mywatchlistpage.dart`
+Pada bagian ini, `mywatchlistpage.dart` digunakan untuk menampilkan setiap identitas film yang di-_fetch_ sebelumnya. Data-datanya akan ditampilkan dalam bentuk tumpukan _cards_ yang dapat di-_scroll_ dan dapat ditekan untuk mengakses halaman detail yaitu `mywatchlistdetails.dart`. Kemudian tampilan dan rutenya akan diatur juga. Berikut sedikit bagian dari implementasi kodenya:
+```
+import 'package:flutter/material.dart';
+import 'package:counter_7/page/mywatchlistdetails.dart';
+import 'package:counter_7/data/data.dart';
+import 'package:counter_7/page/drawer.dart';
+
+class MyWatchlistPage extends StatefulWidget {
+    const MyWatchlistPage({Key? key}) : super(key: key);
+
+    @override
+    _MyWatchlistPageState createState() => _MyWatchlistPageState();
+}
+
+class _MyWatchlistPageState extends State<MyWatchlistPage> {
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+    appBar: AppBar(
+        title: const Text('My Watch List'),
+    ),
+    drawer: const LabDrawer(),
+    body: FutureBuilder(
+...
+...
+```
+
+### Mengerjakan bagian `mywatchlistdetails.dart`
+Pada bagian ini, `mywatchlistdetails.dart` berfungsi untuk menampilkan setiap detail dari objek `MyWatchlist` yaitu setiap atribut yang dimilikinya. Dapat diakses dengan menekan salah satu _card_ pada halaman `mywatchlistpage.dart`. Nantinya akan diatur juga tampilan dan rutenya. Berikut sedikit bagian dari implementasinya:
+```
+import 'package:flutter/material.dart';
+import 'package:counter_7/model/mywatchlistmodel.dart';
+import 'package:counter_7/page/mywatchlistpage.dart';
+import 'package:counter_7/page/drawer.dart';
+import 'package:intl/intl.dart';
+
+
+class MyWatchlistPageDetails extends StatefulWidget {
+  MyWatchlistPageDetails({Key? key, required this.movie})
+      : super(key: key);
+
+  MyWatchlist movie;
+
+  @override
+  State<MyWatchlistPageDetails> createState() =>
+      _MyWatchlistPageDetailsState(movie);
+}
+
+class _MyWatchlistPageDetailsState extends State<MyWatchlistPageDetails> {
+  MyWatchlist movie;
+  _MyWatchlistPageDetailsState(this.movie);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Detail WatchList'),
+        ),
+        drawer: const LabDrawer(),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                movie.fields.title,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(
+...
+...
+```
+
+### Mengerjakan bagian `data.dart`
+Pada bagian ini akan di-_fetch_ data JSON dari tugas 3 PBP mengenai mywatchlist yang telah dikerjakan sebelumnya, sehingga nantinya dapat dipergunakan untuk bagian page mywatchlist di Flutternya.
+
+
+### Membuat button `back`
+Ini dilakukan menggunakan `ElevatedButton` di halaman `mywatchlistdetails.dart` agar _user_ dapat kembali ke halaman sebelumnya.
+
+### Melakukan _refactoring files_ dari tugas 6 dan 7 sebelumnya
+
+### Melakukan Push Ke Repo
+Gunakan perintah `git add .`, `git commit -m "Comment"`, dan `git push`
